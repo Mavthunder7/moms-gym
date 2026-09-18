@@ -1,45 +1,658 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="referrer" content="strict-origin-when-cross-origin"><meta name="theme-color" content="#f7f8fc">
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="theme-color" content="#f7f8fc">
 <title>Mom's Gym</title>
 <style>
-:root{--bg:#f7f8fc;--card:#fff;--text:#172033;--muted:#687386;--line:#e7eaf0;--accent:#6d5dfc;--soft:#f0eeff;--hi:#eaf8ef}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
-.app{max-width:560px;margin:auto;padding:14px 14px 34px}.header{padding:9px 3px 17px}
-.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.09em;font-weight:900;color:var(--muted)}h1{font-size:29px;margin:3px 0 4px}.header p{margin:0;color:var(--muted);font-size:14px}
+:root{--bg:#f7f8fc;--card:#fff;--text:#172033;--muted:#687386;--line:#e7eaf0;--accent:#6d5dfc;--soft:#f0eeff;--green:#eaf8ef}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
+.app{max-width:560px;margin:auto;padding:14px 14px 34px} .header{padding:9px 3px 17px}
+.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.09em;font-weight:900;color:var(--muted)} h1{font-size:29px;margin:3px 0 4px;letter-spacing:-.6px} .header p{margin:0;color:var(--muted);font-size:14px}
 .days{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:15px;position:sticky;top:0;padding:4px 0 10px;background:var(--bg);z-index:5}
-.day{border:0;border-radius:15px;background:#fff;padding:12px 3px;font-weight:900;color:var(--muted);box-shadow:0 4px 16px rgba(20,30,60,.06)}.day.active{background:var(--text);color:#fff}
-.summary{background:var(--soft);border-radius:19px;padding:14px 15px;margin-bottom:13px}.summary strong{display:block;font-size:18px}.summary span{font-size:13px;color:#596477}
+.day-btn{border:0;border-radius:15px;background:#fff;padding:12px 3px;font-weight:900;color:var(--muted);box-shadow:0 4px 16px rgba(20,30,60,.06)} .day-btn.active{background:var(--text);color:#fff}
+.day-screen{display:none} .day-screen.active{display:block}
+.summary{background:var(--soft);border-radius:19px;padding:14px 15px;margin-bottom:13px} .summary strong{display:block;font-size:18px} .summary span{font-size:13px;color:#596477}
 .card{background:var(--card);border-radius:23px;overflow:hidden;box-shadow:0 9px 27px rgba(20,30,60,.08);margin-bottom:13px}
-.video{background:#000;aspect-ratio:16/9}.video iframe{width:100%;height:100%;border:0;display:block}
-.content{padding:17px}.num{font-size:12px;font-weight:900;color:var(--accent);margin-bottom:2px}h2{font-size:23px;margin:0 0 9px}
-.badge{display:inline-block;padding:5px 8px;border-radius:999px;background:var(--hi);color:#257044;font-size:11px;font-weight:900;margin-bottom:9px}
-.pills{display:flex;flex-wrap:wrap;gap:6px}.pill{background:#f0f2f6;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:900}
-.note{font-size:13px;line-height:1.5;color:#5b6677;margin:13px 0}.sets{display:grid;gap:8px}
-.set{display:flex;align-items:center;gap:10px;padding:11px;border:1px solid var(--line);border-radius:14px;font-weight:800;font-size:13px}.set input{width:20px;height:20px;accent-color:var(--accent)}
-.progress{margin-top:10px;background:var(--soft);border-radius:13px;padding:10px;text-align:center;font-size:12px;font-weight:900}
-.rest{width:100%;margin-top:9px;border:0;border-radius:13px;padding:11px;background:#eef1f5;font-weight:900;color:var(--text)}
+.video{background:#000;aspect-ratio:16/9} .video iframe{width:100%;height:100%;border:0;display:block}
+.content{padding:17px} .number{font-size:12px;font-weight:900;color:var(--accent);margin-bottom:2px} h2{font-size:23px;margin:0 0 8px}
+.badge{display:inline-block;padding:5px 8px;border-radius:999px;background:var(--green);color:#257044;font-size:11px;font-weight:900;margin-bottom:9px}
+.pills{display:flex;flex-wrap:wrap;gap:6px} .pill{background:#f0f2f6;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:900}
+.note{font-size:13px;line-height:1.5;color:#5b6677;margin:13px 0} .sets{display:grid;gap:8px}
+.set{display:flex;align-items:center;gap:10px;padding:11px;border:1px solid var(--line);border-radius:14px;font-weight:800;font-size:13px} .set input{width:20px;height:20px;accent-color:var(--accent)}
+.progress,.timebox{margin-top:10px;background:var(--soft);border-radius:13px;padding:10px;text-align:center;font-size:12px;font-weight:900}
+.rest{width:100%;margin-top:9px;border:0;border-radius:13px;padding:11px;background:#eef1f5;font-weight:900;color:var(--text)} .rest:disabled{opacity:.65}
+.notice{margin:15px 0;padding:13px;border-radius:15px;background:#fff7e8;color:#765116;font-size:11px;line-height:1.45}
 footer{text-align:center;color:#9aa3b2;font-size:11px;line-height:1.45;padding:8px 5px 0}
-</style></head>
-<body><div class="app">
+@media(max-width:370px){.day-btn{font-size:10px}}
+</style>
+</head>
+<body>
+<div class="app">
 <header class="header"><div class="eyebrow">Simple 5-day gym guide</div><h1>Mom's Gym 💪</h1><p>Tap a day, watch the exercise, then check off the sets.</p></header>
-<nav class="days"><button class="day active" data-day="monday">MON</button><button class="day" data-day="tuesday">TUE</button><button class="day" data-day="wednesday">WED</button><button class="day" data-day="thursday">THU</button><button class="day" data-day="friday">FRI</button></nav>
-<main id="app"></main><footer>Warm up 8–10 minutes with easy walking. Choose a comfortable weight and use controlled movement. Stop for sharp or unusual pain. General fitness information only.</footer>
+<nav class="days">
+<button class="day-btn active" data-target="monday">MON</button><button class="day-btn" data-target="tuesday">TUE</button>
+<button class="day-btn" data-target="wednesday">WED</button><button class="day-btn" data-target="thursday">THU</button><button class="day-btn" data-target="friday">FRI</button>
+</nav>
+<main>
+<section class="day-screen active" id="monday">
+  <div class="summary"><strong>Monday • Legs + Glutes</strong><span>6 planned exercises</span></div>
+  
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/COeP5FmdxJI?rel=0&playsinline=1" title="Leg Press demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 1</div>
+    <h2>Leg Press</h2>
+    <div class="badge">🎥 Your exact video demonstration</div>
+    <div class="pills">
+      <span class="pill">3 sets</span><span class="pill">10–12 reps</span>
+      <span class="pill">60–90 sec rest</span>
+    </div>
+    <p class="note">Use a comfortable weight. Keep your back supported and move in a controlled way.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 3 • 10–12 reps</span></label></div>
+    <div class="progress">0 of 3 sets completed</div>
+    <button class="rest" data-seconds="60">⏱ Start 60–90 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/Dllq4Vd-Xek?rel=0&playsinline=1" title="Leg Extension demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 2</div>
+    <h2>Leg Extension</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">2 sets</span><span class="pill">12 reps</span>
+      <span class="pill">60–90 sec rest</span>
+    </div>
+    <p class="note">Set the machine so your knee lines up with its pivot. Move slowly.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 12 reps</span></label></div>
+    <div class="progress">0 of 2 sets completed</div>
+    <button class="rest" data-seconds="60">⏱ Start 60–90 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/rYon2i8I6C8?rel=0&playsinline=1" title="Leg Curl demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 3</div>
+    <h2>Leg Curl</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">3 sets</span><span class="pill">10–12 reps</span>
+      <span class="pill">60–90 sec rest</span>
+    </div>
+    <p class="note">Keep your body supported and control both the curl and return.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 3 • 10–12 reps</span></label></div>
+    <div class="progress">0 of 3 sets completed</div>
+    <button class="rest" data-seconds="60">⏱ Start 60–90 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/OjI5OpV6IWA?rel=0&playsinline=1" title="Hip Abduction demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 4</div>
+    <h2>Hip Abduction</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">2 sets</span><span class="pill">15 reps</span>
+      <span class="pill">45–60 sec rest</span>
+    </div>
+    <p class="note">Sit tall with your back supported. Open the pads under control and return slowly.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 15 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 15 reps</span></label></div>
+    <div class="progress">0 of 2 sets completed</div>
+    <button class="rest" data-seconds="45">⏱ Start 45–60 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/K_jsGgztcGU?rel=0&playsinline=1" title="Calf Raise demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 5</div>
+    <h2>Calf Raise</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">2 sets</span><span class="pill">12–15 reps</span>
+      <span class="pill">45–60 sec rest</span>
+    </div>
+    <p class="note">Rise onto the toes smoothly, pause briefly, then lower with control.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 12–15 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 12–15 reps</span></label></div>
+    <div class="progress">0 of 2 sets completed</div>
+    <button class="rest" data-seconds="45">⏱ Start 45–60 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/vdsaHSr1H_E?rel=0&playsinline=1" title="Treadmill demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 6</div>
+    <h2>Treadmill</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">15–20 min</span>
+      
+    </div>
+    <p class="note">Begin at an easy walking pace. Adjust speed and incline to a comfortable level.</p>
+    <div class="sets"><div class="timebox">⏱ 15–20 min</div></div>
+    
+    
+  </div>
+</article>
+</section>
+<section class="day-screen " id="tuesday">
+  <div class="summary"><strong>Tuesday • Upper Body + Cardio</strong><span>6 planned exercises</span></div>
+  
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/tfLET28B5bM?rel=0&playsinline=1" title="Chest Press demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 1</div>
+    <h2>Chest Press</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">3 sets</span><span class="pill">10–12 reps</span>
+      <span class="pill">60–90 sec rest</span>
+    </div>
+    <p class="note">Adjust the seat so the handles are around mid-chest. Press smoothly.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 3 • 10–12 reps</span></label></div>
+    <div class="progress">0 of 3 sets completed</div>
+    <button class="rest" data-seconds="60">⏱ Start 60–90 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/zA0SMbuWv5U?rel=0&playsinline=1" title="Lat Pulldown demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 2</div>
+    <h2>Lat Pulldown</h2>
+    <div class="badge">🎥 Hindi demonstration</div>
+    <div class="pills">
+      <span class="pill">3 sets</span><span class="pill">10–12 reps</span>
+      <span class="pill">60–90 sec rest</span>
+    </div>
+    <p class="note">Sit securely, keep your torso stable, and pull toward the upper chest without swinging.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 3 • 10–12 reps</span></label></div>
+    <div class="progress">0 of 3 sets completed</div>
+    <button class="rest" data-seconds="60">⏱ Start 60–90 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/gmy4V8yJszs?rel=0&playsinline=1" title="Seated Row demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 3</div>
+    <h2>Seated Row</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">3 sets</span><span class="pill">10–12 reps</span>
+      <span class="pill">60–90 sec rest</span>
+    </div>
+    <p class="note">Keep the spine neutral and pull the handle toward your torso without jerking.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 3 • 10–12 reps</span></label></div>
+    <div class="progress">0 of 3 sets completed</div>
+    <button class="rest" data-seconds="60">⏱ Start 60–90 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/kyKCutasM8Q?rel=0&playsinline=1" title="Shoulder Press demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 4</div>
+    <h2>Shoulder Press</h2>
+    <div class="badge">🎥 Hindi demonstration</div>
+    <div class="pills">
+      <span class="pill">2 sets</span><span class="pill">10–12 reps</span>
+      <span class="pill">60–90 sec rest</span>
+    </div>
+    <p class="note">Use a comfortable load and press smoothly.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 10–12 reps</span></label></div>
+    <div class="progress">0 of 2 sets completed</div>
+    <button class="rest" data-seconds="60">⏱ Start 60–90 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/qfjYCFuJmj0?rel=0&playsinline=1" title="Biceps Curl demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 5</div>
+    <h2>Biceps Curl</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">2 sets</span><span class="pill">12 reps</span>
+      <span class="pill">45–60 sec rest</span>
+    </div>
+    <p class="note">Keep the elbows close to your sides and avoid swinging.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 12 reps</span></label></div>
+    <div class="progress">0 of 2 sets completed</div>
+    <button class="rest" data-seconds="45">⏱ Start 45–60 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/zfgZMh8UBcw?rel=0&playsinline=1" title="Triceps Pushdown demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 6</div>
+    <h2>Triceps Pushdown</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">2 sets</span><span class="pill">12 reps</span>
+      <span class="pill">45–60 sec rest</span>
+    </div>
+    <p class="note">Keep elbows close to your body and control the return.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 12 reps</span></label></div>
+    <div class="progress">0 of 2 sets completed</div>
+    <button class="rest" data-seconds="45">⏱ Start 45–60 sec rest</button>
+  </div>
+</article>
+</section>
+<section class="day-screen " id="wednesday">
+  <div class="summary"><strong>Wednesday • Cardio + Core + Recovery</strong><span>5 planned exercises</span></div>
+  
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/vdsaHSr1H_E?rel=0&playsinline=1" title="Treadmill demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 1</div>
+    <h2>Treadmill</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">30–40 min</span>
+      
+    </div>
+    <p class="note">Use a comfortable walking pace.</p>
+    <div class="sets"><div class="timebox">⏱ 30–40 min</div></div>
+    
+    
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/rEqRmKAQ5xM?rel=0&playsinline=1" title="Stationary Bike demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 2</div>
+    <h2>Stationary Bike</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">15–20 min</span>
+      
+    </div>
+    <p class="note">Keep resistance comfortable and pedal at an easy-to-moderate pace.</p>
+    <div class="sets"><div class="timebox">⏱ 15–20 min</div></div>
+    
+    
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/fuPFq2EYswE?rel=0&playsinline=1" title="Abdominal Machine demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 3</div>
+    <h2>Abdominal Machine</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">2 sets</span><span class="pill">12 reps</span>
+      <span class="pill">45–60 sec rest</span>
+    </div>
+    <p class="note">Sit securely and use your abdominal muscles rather than pulling with your arms.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 12 reps</span></label></div>
+    <div class="progress">0 of 2 sets completed</div>
+    <button class="rest" data-seconds="45">⏱ Start 45–60 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/-m-SpzvBkP0?rel=0&playsinline=1" title="Bird Dog demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 4</div>
+    <h2>Bird Dog</h2>
+    <div class="badge">🎥 Hindi demonstration</div>
+    <div class="pills">
+      <span class="pill">2 sets</span><span class="pill">8/side reps</span>
+      <span class="pill">45–60 sec rest</span>
+    </div>
+    <p class="note">Raise the opposite arm and leg while keeping your spine steady.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 8/side reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 8/side reps</span></label></div>
+    <div class="progress">0 of 2 sets completed</div>
+    <button class="rest" data-seconds="45">⏱ Start 45–60 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/vbVHRTe-3Tg?rel=0&playsinline=1" title="Gentle Stretching demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 5</div>
+    <h2>Gentle Stretching</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">5–10 min</span>
+      
+    </div>
+    <p class="note">Move gently and never force a stretch.</p>
+    <div class="sets"><div class="timebox">⏱ 5–10 min</div></div>
+    
+    
+  </div>
+</article>
+</section>
+<section class="day-screen " id="thursday">
+  <div class="summary"><strong>Thursday • Legs + Glutes + Hamstrings</strong><span>6 planned exercises</span></div>
+  
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/COeP5FmdxJI?rel=0&playsinline=1" title="Leg Press demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 1</div>
+    <h2>Leg Press</h2>
+    <div class="badge">🎥 Your exact video demonstration</div>
+    <div class="pills">
+      <span class="pill">3 sets</span><span class="pill">10–12 reps</span>
+      <span class="pill">60–90 sec rest</span>
+    </div>
+    <p class="note">Use a comfortable weight and controlled range of motion.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 3 • 10–12 reps</span></label></div>
+    <div class="progress">0 of 3 sets completed</div>
+    <button class="rest" data-seconds="60">⏱ Start 60–90 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/rYon2i8I6C8?rel=0&playsinline=1" title="Leg Curl demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 2</div>
+    <h2>Leg Curl</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">3 sets</span><span class="pill">10–12 reps</span>
+      <span class="pill">60–90 sec rest</span>
+    </div>
+    <p class="note">Control both directions and avoid momentum.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 3 • 10–12 reps</span></label></div>
+    <div class="progress">0 of 3 sets completed</div>
+    <button class="rest" data-seconds="60">⏱ Start 60–90 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/Dllq4Vd-Xek?rel=0&playsinline=1" title="Leg Extension demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 3</div>
+    <h2>Leg Extension</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">2 sets</span><span class="pill">12 reps</span>
+      <span class="pill">60–90 sec rest</span>
+    </div>
+    <p class="note">Use a comfortable weight and controlled repetitions.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 12 reps</span></label></div>
+    <div class="progress">0 of 2 sets completed</div>
+    <button class="rest" data-seconds="60">⏱ Start 60–90 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/OjI5OpV6IWA?rel=0&playsinline=1" title="Hip Abduction demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 4</div>
+    <h2>Hip Abduction</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">2 sets</span><span class="pill">15 reps</span>
+      <span class="pill">45–60 sec rest</span>
+    </div>
+    <p class="note">Open and return slowly through a comfortable range.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 15 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 15 reps</span></label></div>
+    <div class="progress">0 of 2 sets completed</div>
+    <button class="rest" data-seconds="45">⏱ Start 45–60 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/K_jsGgztcGU?rel=0&playsinline=1" title="Calf Raise demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 5</div>
+    <h2>Calf Raise</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">2 sets</span><span class="pill">15 reps</span>
+      <span class="pill">45–60 sec rest</span>
+    </div>
+    <p class="note">Rise and lower smoothly without bouncing.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 15 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 15 reps</span></label></div>
+    <div class="progress">0 of 2 sets completed</div>
+    <button class="rest" data-seconds="45">⏱ Start 45–60 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/vdsaHSr1H_E?rel=0&playsinline=1" title="Treadmill demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 6</div>
+    <h2>Treadmill</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">20 min</span>
+      
+    </div>
+    <p class="note">Comfortable walking for the planned time.</p>
+    <div class="sets"><div class="timebox">⏱ 20 min</div></div>
+    
+    
+  </div>
+</article>
+</section>
+<section class="day-screen " id="friday">
+  <div class="summary"><strong>Friday • Upper Body + Cardio</strong><span>7 planned exercises</span></div>
+  
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/tfLET28B5bM?rel=0&playsinline=1" title="Chest Press demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 1</div>
+    <h2>Chest Press</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">2 sets</span><span class="pill">10–12 reps</span>
+      <span class="pill">60–90 sec rest</span>
+    </div>
+    <p class="note">Press smoothly with your back supported.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 10–12 reps</span></label></div>
+    <div class="progress">0 of 2 sets completed</div>
+    <button class="rest" data-seconds="60">⏱ Start 60–90 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/zA0SMbuWv5U?rel=0&playsinline=1" title="Lat Pulldown demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 2</div>
+    <h2>Lat Pulldown</h2>
+    <div class="badge">🎥 Hindi demonstration</div>
+    <div class="pills">
+      <span class="pill">2 sets</span><span class="pill">10–12 reps</span>
+      <span class="pill">60–90 sec rest</span>
+    </div>
+    <p class="note">Keep your torso stable and pull with control.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 10–12 reps</span></label></div>
+    <div class="progress">0 of 2 sets completed</div>
+    <button class="rest" data-seconds="60">⏱ Start 60–90 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/gmy4V8yJszs?rel=0&playsinline=1" title="Seated Row demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 3</div>
+    <h2>Seated Row</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">2 sets</span><span class="pill">10–12 reps</span>
+      <span class="pill">60–90 sec rest</span>
+    </div>
+    <p class="note">Keep the spine neutral and avoid swinging.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 10–12 reps</span></label></div>
+    <div class="progress">0 of 2 sets completed</div>
+    <button class="rest" data-seconds="60">⏱ Start 60–90 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/kyKCutasM8Q?rel=0&playsinline=1" title="Shoulder Press demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 4</div>
+    <h2>Shoulder Press</h2>
+    <div class="badge">🎥 Hindi demonstration</div>
+    <div class="pills">
+      <span class="pill">2 sets</span><span class="pill">10–12 reps</span>
+      <span class="pill">60–90 sec rest</span>
+    </div>
+    <p class="note">Use a comfortable load and controlled repetitions.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 10–12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 10–12 reps</span></label></div>
+    <div class="progress">0 of 2 sets completed</div>
+    <button class="rest" data-seconds="60">⏱ Start 60–90 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/qfjYCFuJmj0?rel=0&playsinline=1" title="Biceps Curl demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 5</div>
+    <h2>Biceps Curl</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">2 sets</span><span class="pill">12 reps</span>
+      <span class="pill">45–60 sec rest</span>
+    </div>
+    <p class="note">Keep the upper arms still and control the lowering phase.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 12 reps</span></label></div>
+    <div class="progress">0 of 2 sets completed</div>
+    <button class="rest" data-seconds="45">⏱ Start 45–60 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/zfgZMh8UBcw?rel=0&playsinline=1" title="Triceps Pushdown demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 6</div>
+    <h2>Triceps Pushdown</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">2 sets</span><span class="pill">12 reps</span>
+      <span class="pill">45–60 sec rest</span>
+    </div>
+    <p class="note">Keep elbows close to your sides.</p>
+    <div class="sets"><label class="set"><input type="checkbox" class="setbox"> <span>Set 1 • 12 reps</span></label><label class="set"><input type="checkbox" class="setbox"> <span>Set 2 • 12 reps</span></label></div>
+    <div class="progress">0 of 2 sets completed</div>
+    <button class="rest" data-seconds="45">⏱ Start 45–60 sec rest</button>
+  </div>
+</article>
+<article class="card">
+  <div class="video">
+    <iframe src="https://www.youtube.com/embed/vdsaHSr1H_E?rel=0&playsinline=1" title="Treadmill demonstration"
+      loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="content">
+    <div class="number">EXERCISE 7</div>
+    <h2>Treadmill</h2>
+    <div class="badge">🎥 English demonstration</div>
+    <div class="pills">
+      <span class="pill">20–25 min</span>
+      
+    </div>
+    <p class="note">Walk at a comfortable pace.</p>
+    <div class="sets"><div class="timebox">⏱ 20–25 min</div></div>
+    
+    
+  </div>
+</article>
+</section></main>
+<div class="notice">Warm up 8–10 minutes with easy walking. Choose a comfortable weight and use controlled movement. Stop for sharp or unusual pain. General fitness information only.</div>
+<footer>Videos are embedded from their original platforms and play inside each exercise card.</footer>
 </div>
 <script>
-const DATA={"monday": {"label": "Monday", "focus": "Legs + Glutes", "ex": [["Leg Press", "3", "10\u201312", "60\u201390 sec", "COeP5FmdxJI", "Your video", "Use a comfortable weight. Keep your back supported and move in a controlled way."], ["Leg Extension", "2", "12", "60\u201390 sec", "Dllq4Vd-Xek", "English", "Set the machine so your knee lines up with its pivot. Move slowly."], ["Leg Curl", "3", "10\u201312", "60\u201390 sec", "rYon2i8I6C8", "English", "Keep your body supported and control both the curl and return."], ["Hip Abduction", "2", "15", "45\u201360 sec", "OjI5OpV6IWA", "English", "Sit tall with your back supported. Open the pads under control and return slowly."], ["Calf Raise", "2", "12\u201315", "45\u201360 sec", "K_jsGgztcGU", "English", "Rise onto the toes smoothly, pause briefly, then lower with control."], ["Treadmill", "\u2014", "15\u201320 min", "\u2014", "vdsaHSr1H_E", "English", "Begin at an easy walking pace. Adjust speed/incline to a comfortable level."]]}, "tuesday": {"label": "Tuesday", "focus": "Upper Body + Cardio", "ex": [["Chest Press", "3", "10\u201312", "60\u201390 sec", "tfLET28B5bM", "English", "Adjust the seat so the handles are around mid-chest. Press smoothly."], ["Lat Pulldown", "3", "10\u201312", "60\u201390 sec", "zA0SMbuWv5U", "Hindi", "Sit securely, keep your torso stable, and pull toward the upper chest without swinging."], ["Seated Row", "3", "10\u201312", "60\u201390 sec", "gmy4V8yJszs", "English", "Keep the spine neutral and pull the handle toward your torso without jerking."], ["Shoulder Press", "2", "10\u201312", "60\u201390 sec", "kyKCutasM8Q", "Hindi", "Use a comfortable load and press smoothly without forcing the shoulders."], ["Biceps Curl", "2", "12", "45\u201360 sec", "qfjYCFuJmj0", "English", "Keep the elbows close to your sides and avoid swinging."], ["Triceps Pushdown", "2", "12", "45\u201360 sec", "zfgZMh8UBcw", "English", "Keep elbows close to your body and control the return."]]}, "wednesday": {"label": "Wednesday", "focus": "Cardio + Core + Recovery", "ex": [["Treadmill", "\u2014", "30\u201340 min", "\u2014", "vdsaHSr1H_E", "English", "Use a comfortable walking pace."], ["Stationary Bike", "\u2014", "15\u201320 min", "\u2014", "rEqRmKAQ5xM", "English", "Keep resistance comfortable and pedal at an easy-to-moderate pace."], ["Abdominal Machine", "2", "12", "45\u201360 sec", "fuPFq2EYswE", "English", "Sit securely and use your abdominal muscles rather than pulling with your arms."], ["Bird Dog", "2", "8/side", "45\u201360 sec", "-m-SpzvBkP0", "Hindi", "Raise the opposite arm and leg while keeping your spine steady."], ["Gentle Stretching", "\u2014", "5\u201310 min", "\u2014", "vbVHRTe-3Tg", "English", "Move gently and never force a stretch."]]}, "thursday": {"label": "Thursday", "focus": "Legs + Glutes + Hamstrings", "ex": [["Leg Press", "3", "10\u201312", "60\u201390 sec", "COeP5FmdxJI", "Your video", "Use a comfortable weight and controlled range of motion."], ["Leg Curl", "3", "10\u201312", "60\u201390 sec", "rYon2i8I6C8", "English", "Control both directions and avoid momentum."], ["Leg Extension", "2", "12", "60\u201390 sec", "Dllq4Vd-Xek", "English", "Use a comfortable weight and controlled repetitions."], ["Hip Abduction", "2", "15", "45\u201360 sec", "OjI5OpV6IWA", "English", "Open and return slowly through a comfortable range."], ["Calf Raise", "2", "15", "45\u201360 sec", "K_jsGgztcGU", "English", "Rise and lower smoothly without bouncing."], ["Treadmill", "\u2014", "20 min", "\u2014", "vdsaHSr1H_E", "English", "Comfortable walking for the planned time."]]}, "friday": {"label": "Friday", "focus": "Upper Body + Cardio", "ex": [["Chest Press", "2", "10\u201312", "60\u201390 sec", "tfLET28B5bM", "English", "Press smoothly with your back supported."], ["Lat Pulldown", "2", "10\u201312", "60\u201390 sec", "zA0SMbuWv5U", "Hindi", "Keep your torso stable and pull with control."], ["Seated Row", "2", "10\u201312", "60\u201390 sec", "gmy4V8yJszs", "English", "Keep the spine neutral and avoid swinging."], ["Shoulder Press", "2", "10\u201312", "60\u201390 sec", "kyKCutasM8Q", "Hindi", "Use a comfortable load and controlled repetitions."], ["Biceps Curl", "2", "12", "45\u201360 sec", "qfjYCFuJmj0", "English", "Keep the upper arms still and control the lowering phase."], ["Triceps Pushdown", "2", "12", "45\u201360 sec", "zfgZMh8UBcw", "English", "Keep elbows close to your sides."], ["Treadmill", "\u2014", "20\u201325 min", "\u2014", "vdsaHSr1H_E", "English", "Walk at a comfortable pace."]]}};const app=document.getElementById('app');const tabs=[...document.querySelectorAll('.day')];let timer;
-function render(k){
- const d=DATA[k];let out='<div class="summary"><strong>'+d.label+' • '+d.focus+'</strong><span>'+d.ex.length+' planned items</span></div>';
- d.ex.forEach((e,i)=>{
-  const [n,s,r,rest,id,lang,note]=e,has=s!=='—';
-  const sets=has?'<div class="sets">'+Array.from({length:Number(s)},(_,j)=>'<label class="set"><input type="checkbox" data-e="'+i+'"> Set '+(j+1)+' • '+r+' reps</label>').join('')+'</div><div class="progress" data-p="'+i+'">0 of '+s+' sets completed</div>':'';
-  const rb=rest!=='—'?'<button class="rest" onclick="startRest(this,''+rest+'')">⏱ Start '+rest+' rest</button>':'';
-  out+='<article class="card"><div class="video"><iframe src="https://www.youtube.com/embed/'+id+'?rel=0&playsinline=1" title="'+n+' demonstration" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><div class="content"><div class="num">Exercise '+(i+1)+'</div><h2>'+n+'</h2><div class="badge">🎥 '+lang+' demonstration</div><div class="pills">'+(has?'<span class="pill">'+s+' sets</span><span class="pill">'+r+' reps</span>':'<span class="pill">'+r+'</span>')+(rest!=='—'?'<span class="pill">'+rest+' rest</span>':'')+'</div><p class="note">'+note+'</p>'+sets+rb+'</div></article>';
+document.querySelectorAll('.day-btn').forEach(btn=>{
+ btn.addEventListener('click',()=>{
+  document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.day-screen').forEach(s=>s.classList.remove('active'));
+  btn.classList.add('active'); document.getElementById(btn.dataset.target).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
  });
- app.innerHTML=out;
- app.querySelectorAll('input[type=checkbox]').forEach(x=>x.onchange=()=>{const e=x.dataset.e,b=[...app.querySelectorAll('input[data-e="'+e+'"]')],n=b.filter(q=>q.checked).length;app.querySelector('[data-p="'+e+'"]').textContent=n+' of '+b.length+' sets completed';});
-}
-function startRest(btn,txt){clearInterval(timer);let n=parseInt(txt);btn.disabled=true;btn.textContent='⏱ Rest: '+n+'s';timer=setInterval(()=>{n--;btn.textContent=n>0?'⏱ Rest: '+n+'s':'✓ Rest finished';if(n<=0){clearInterval(timer);btn.disabled=false;}},1000)}
-tabs.forEach(t=>t.onclick=()=>{tabs.forEach(x=>x.classList.remove('active'));t.classList.add('active');render(t.dataset.day);scrollTo({top:0,behavior:'smooth'})});render('monday');
-</script></body></html>
+});
+document.querySelectorAll('.day-screen').forEach(screen=>{
+ screen.querySelectorAll('.setbox').forEach(box=>box.addEventListener('change',()=>{
+  const boxes=[...screen.querySelectorAll('.setbox')];
+  const card=box.closest('.card'); const done=boxes.filter(b=>b.checked).length;
+  const progress=card.querySelector('.progress');
+  if(progress) progress.textContent=done+' of '+card.querySelectorAll('.setbox').length+' sets completed';
+ }));
+});
+document.querySelectorAll('.rest').forEach(btn=>{
+ btn.addEventListener('click',()=>{
+  let n=parseInt(btn.dataset.seconds,10); btn.disabled=true; btn.textContent='⏱ Rest: '+n+'s';
+  const timer=setInterval(()=>{n--;btn.textContent=n>0?'⏱ Rest: '+n+'s':'✓ Rest finished';if(n<=0){clearInterval(timer);btn.disabled=false;}},1000);
+ });
+});
+</script>
+</body>
+</html>
